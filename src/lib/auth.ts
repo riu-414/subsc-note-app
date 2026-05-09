@@ -11,8 +11,19 @@ export const signInWithPassword = async ({ email, password }: AuthCredentials) =
   return data
 }
 
+const getEmailRedirectTo = () => {
+  if (typeof window === 'undefined') return undefined
+  return window.location.origin
+}
+
 export const signUpWithPassword = async ({ email, password }: AuthCredentials) => {
-  const { data, error } = await supabase.auth.signUp({ email, password })
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: getEmailRedirectTo(),
+    },
+  })
   if (error) throw error
   return data
 }
